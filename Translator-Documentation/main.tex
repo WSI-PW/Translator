@@ -1,0 +1,179 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[top = 3cm, bottom = 3cm, left=3cm, right = 3cm]{geometry}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{algorithm}
+\makeatletter
+\renewcommand{\ALG@name}{Pseudokod}
+\makeatother
+\usepackage[noend]{algpseudocode}
+\usepackage{polski}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{minted}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage[version=4]{mhchem}
+\usepackage{multirow}
+
+
+\newenvironment{conditions}
+  {\par\vspace{\abovedisplayskip}\noindent\begin{tabular}{>{$}l<{$} @{${}-{}$} l}}
+  {\end{tabular}\par\vspace{\belowdisplayskip}}
+   
+\renewcommand*\contentsname{Spis treści}
+
+
+\begin{document}
+
+\input{titlepage}
+\tableofcontents
+
+\newpage
+
+\section{Opis Problemu}
+Będziemy się zajmować problemem tłumaczenia z jednego języka naturalnego na drugi. W naszym przypadku będzie to tłumaczenie z języka polskiego na język angielski. Zastosujemy ku temu tłumaczenie automatyczne, zwane też tłumaczeniem maszynowym, a więc tekst będzie tłumaczony w pełni przez komputer, bez wsparcia człowieka. 
+
+Opiszemy, zaimplementujemy i porównamy dwie metody tłumaczenia - brutalną i probabilistyczną. Spróbujemy ustalić, która metoda tłumaczy tekst w bardziej przydatny i zrozumiały dla człowieka sposób.
+
+Oba modele będą uczone za pomocą tych samych danych, jednak będą one przetwarzane w inny sposób. W metodzie brutalnej komputer będzie próbował uczyć się definicji danych słów porównując podane przetłumaczone zdania słowo po słowie, zaś w metodzie probabilistycznej komputer będzie próbował znaleźć korelacje danego słowa z jego sąsiadami, tworząc coś podobnego do kontekstu słowa w zdaniu.
+
+\section{Metoda brutalna}
+\subsection{Koncept}
+Metoda brutalna polega na prostym zapamiętywaniu tłumaczenia każdego słowa lub wyrażenia ze zbioru przetłumaczonych słów i wyrażeń. W ten sposób budujemy jak największy słownik tak, aby potem, przy tłumaczeniu nowego zdania skorzystać z tego słownika, aby tłumaczyć nieznane zdanie przetwarzając je element po elemencie. Jeśli element zdania ma więcej niż jedno tłumaczenie w naszym słowniku, możemy potraktować to na kilka sposobów: na przykład wybrać losowe lub najpopularniejsze tłumaczenie.
+
+Jak widać po zamieszczonym poniżej pseudokodzie, metoda jest bardzo mocno zależna od posiadanego słownika - jeśli słownik nie będzie zawierał wszystkich słów w zdaniu, nie mamy zbyt wielkich szans na zrozumiałe tłumaczenie. Dodatkowo poniższa implementacja wybiera najpopularniejsze tłumaczenie danego słowa, przez co możemy się spodziewać, że zdania w których pojedyncze słowa mają kilka znaczeń mogą być tłumaczone w sposób bezsensowny: na przykład zdanie "Zamek się zatrzasnął" może być przetłumaczone jako "Castle self slammed". Metoda ta może być bardzo przydatna w przypadku tłumaczeniu pojedynczych słów, ponieważ kontekst nie jest wtedy specjalnie ważny. 
+
+
+\newpage
+\subsection{Pseudokod}
+\begin{verbatim}
+string BruteForceTłumacz(string[] zdanie)
+{
+.   if(zdanie.Length == 0)
+.   {
+.   .   return "";
+.   }
+.   	
+.   string tłumaczenie = "";
+.   foreach(string słowo in zdanie)
+.   {
+.   .   if(słownik.Contains(słowo) == false)
+.   .   {
+.   .   .   tłumaczenie.Append("?");
+.   .   }
+.   .   else
+.   .   {
+.   .   .   (int liczbaWystąpień, string tłumaczenieSłowa) rezultaty = 
+.   .   .   słownik.GetAllWithKey(słowo);
+.   .   .
+.   .   .   rezultaty.SortDescending(x => x.liczbaWystąpień);
+.   .   .
+.   .   .   tłumaczenie.Append(rezultaty.First().tłumaczenieSłowa);
+.   .   }
+.   }
+.   return tłumaczenie;
+}
+\end{verbatim}
+
+\section{Metoda probabilistyczna}
+
+\input{algorytm_probabilistyczny}
+
+\section{Pozyskanie danych}
+
+Potrzebujemy przygotować dwa rodzaje danych: 
+
+\begin{itemize}
+    \item  słowa wraz z tłumaczeniami
+    \item  całe zdania wraz z tłumaczeniami
+\end{itemize}
+
+Tak jak z pojedynczymi słowami nie ma większego problemu, ponieważ są one dostępne w słownikach polsko-angielskich, tak ze zdaniami pojawiają się trudności. Będziemy korzystać z paru technik pozyskiwania pełnych zdań wraz z ich poprawnymi tłumaczeniami. 
+
+Pierwszą i najważniejszą jest przetłumaczenie przez nas pewnej bazy zdań samodzielnie. Jest to czasochłonna metoda, lecz dająca satysfakcjonujące rezultaty. Pary zdań przetłumaczone w ten sposób będą podstawą naszej bazy danych. 
+
+Drugim sposobem pozyskiwania danych będzie skorzystanie z tłumaczeń dostarczonych przez specjalistów. Istnieją słowniki, które zawierają przykłady zdań wraz z tłumaczeniami (np. \nolinkurl{http://www.darlex.pl/download/angielski_tematyczny_2013.pdf}), a także strony internetowe służące do nauki angielskiego, gdzie takie zdania wraz z tłumaczeniami występują. 
+
+Trzecią metodą będzie pozyskanie bloków tekstu. Przykładem takowych bloków mogą być fragmenty literatury, czasopism itp. Jednakże to metoda, która umożliwia pojawienie się pewnych błędów. Dzieje się tak, ponieważ zdania w tłumaczeniach książek nie koniecznie muszą mieć zachowaną kolejność.  
+
+\section{Przetwarzanie danych}
+Korzystając ze zbioru danych zebranych z różnych źródeł zostanie utworzona baza danych będąca de facto słownikiem polsko-angielskim zawierającym słowa lub wyrażenia w języku polskim oraz ich angielskie odpowiedniki. Dla poszczególnych źródeł danych wyróżnić można kilka nieco innych podejść od ich przetworzenia:
+\begin{itemize}
+  \item \textbf{Pojedyncze słowa} - W tym przypadku dodatkowe przetwarzanie nie jest potrzebne. Słowa wraz z ich tłumaczeniami zostaną umieszczone w bazie danych jako pary słów polskich i angielskich.
+  \item \textbf{Pojedyncze zdania} - W tym przypadku dodatkowe przetwarzanie nie jest potrzebne. Zdania wraz z ich tłumaczeniami zostaną umieszczone w bazie danych jako pary zdań polskich i angielskich.
+  \item \textbf{Bloki tekstu} - W tym przypadku dodatkowe przetworzenie danych jest niezbędne. Z racji tego, iż bloki tekstu nie są najczęściej tłumaczone jeden do jeden, to nawet w przypadku znalezienia gotowych tłumaczeń nie będą one odpowiednie dla wymaganej bazy. Podejście które pozwoli utworzyć rozsądny słownik tłumaczeń polega na podzieleniu bloków tekstu na słowa lub zdania (odpowiednie tekst oryginalny i jego tłumaczenie), a następnie na poddaniu analizy każdego ze zdań w bloku tekstu.
+\end{itemize}
+
+Planujemy, żeby baza danych miała formę słownika. Jego kluczami będą wektory napisów reprezentujące pojedyncze słowa, frazy składające się z kilku słów oraz pełne zdania. Jego wartościami będą słowniki. Kluczami słowników zagnieżdżonego będą angielskie tłumaczenia fraz. Wartościami słowników zagnieżdżonych będzie liczba zmiennoprzecinkowa określająca częstość danego tłumaczenia. Poniższy przykład służy zobrazowaniu tej koncepcji.
+
+\newpage
+Niech "Baza" będzie bazą danych. Niech "pokój" będzie słowem, które chcemy przetłumaczyć. 
+
+\begin{verbatim}
+Dictionary<string[], Dictionary<string, double>> Baza;
+Dictionary<string, double> tłumaczenia_pokój = Baza["pokój"];
+
+foreach( para in tłumaczenia_pokój)
+{
+.    Print(para);
+}
+
+OUTPUT:
+>> room 5,4
+>> peace 10,2
+\end{verbatim}
+
+Wynik powyższego programu mówi o tym, że znane są dwa tłumaczenia słowa "pokój": "room" i "peace", z czego drugie jest popularniejsze.
+
+Przetwarzanie danych będzie przebiegało następująco. Dane będą dzielone na pojedyncze zdania wraz z ich tłumaczeniami.
+Niech zdanie $u$ będzie reprezentowane przez zbiór $\{u_1,u_2,...,u_n\}$, a jego tłumaczenie $v$ przez zbiór $\{v_1, v_2, ..., v_m\}$. Dla każdego zdania będziemy rozważać wszystkie jego fragmenty. Przez fragment zdania $u$ rozumiemy tutaj dowolny ciąg postaci $\{u_i, u_{i+1},...,u_{j}\}$, gdzie $ 1 \leq i \leq j \leq n$. Dla każdego fragmentu zdania $u$ będziemy wyznaczać tłumaczenia, czyli fragmenty tłumaczenia $v$, które najprawdopodobniej są tłumaczeniem danego fragmentu zdania. Następnie będziemy szacować prawdopodobieństwo, że dane tłumaczenie jest dobrym tłumaczeniem fragmentu, za pomocą pewnej wartości $d$. Następnie w bazie danych częstość tego tłumaczenia będzie inkrementowana o wartość $d$ (lub inicjalizowana wartością $d$, jeżeli wcześniej nie było jej w słowniku).
+
+Możliwe tłumaczenia będą wybierane w następujący sposób. Dla fragmentu $u_{ij} = \{u_i, u_{i+1},...,u_{j}\}$ możliwymi tłumaczeniami będą podciągi ciągu $v_{xy} = \{v_x, v_{x+1}, ..., v_y\}$ ($v$ jak wyżej), gdzie $x = min\{i, m-n+i\}$ oraz $y = max\{j, m-n+j\}$. Wartość $d$ będzie szacowana w zależności od długości fragmentu oraz długości tłumaczenia. Oczekiwana długość tłumaczenia jednego słowa zdania $u$ to $\frac{m}{n}$ słowa tłumaczenia $v$. Zatem ilość słów tłumaczenia $v$ oczekiwana do przetłumaczenia fragmentu $u_{ij}$ wynosi $\frac{m(j-i+1)}{n}$. Chcemy, żeby dokładnie dla takiej długości tłumaczenia, $d$ równało się jeden, a dla wartości rozbieżnych odpowiednio mniej. Wówczas wzór na wartość $d$ można zapisać jako:
+
+\begin{align*}
+    d = e^{-\frac{(l -l')^2}{l}},
+\end{align*}
+
+gdzie $l = \frac{m(j-i+1)}{n}$ - oczekiwana długość tłumaczenia, $l' = y-x+1$ - faktyczna długość tłumaczenia.
+
+Tak dobrany parametr $d$ przyjmuje wartości od 0 do 1. Ponadto chcemy, aby dla dużych $l$ i niewielkiej różnicy $|l-l'$ wartość $d$ była wciąż bliska $1$. Powyższa funkcja posiada taką własność.
+
+Rozważmy następujący przykład. Niech zdaniem $u$ będzie "Kot śpi", a jego tłumaczeniem $v$ "The cat is sleeping".
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c | c |}
+    \hline   Fragment & Tłumaczenie & Szacowana częstość\\
+    \hline   \multirow{6}{*}{Kot} & The & 0,61\\ \cline{2-3}
+                                & cat & 0,61 \\ \cline{2-3}
+                                & is & 0,61\\ \cline{2-3}
+                                & The cat & 1 \\ \cline{2-3}
+                                & cat is & 1 \\ \cline{2-3}
+    \hline   \multirow{6}{*}{śpi} & cat & 0,61\\ \cline{2-3}
+                            & is & 0,61 \\ \cline{2-3}
+                            & sleeping & 0,61\\ \cline{2-3}
+                            & cat is & 1 \\ \cline{2-3}
+                            & is sleeping & 1 \\ \cline{2-3}
+                            & cat is sleeping & 1 \\ \cline{2-3}
+    \hline   \multirow{6}{*}{Kot śpi} & The & 0,37\\ \cline{2-3}
+                        & cat & 0,37 \\ \cline{2-3}
+                        & is & 0,37\\ \cline{2-3}
+                        & sleeping & 0,37 \\ \cline{2-3}
+                        & The cat & 0,61 \\ \cline{2-3}
+                        & cat is & 0,61 \\ \cline{2-3}
+                        & is sleeping& 0,61 \\ \cline{2-3}
+                        & The cat is & 0,78\\ \cline{2-3}
+                        & cat is sleeping & 0,78 \\ \cline{2-3}
+                        & The cat is sleeping& 1 \\ \cline{2-3}
+    \hline
+    \end{tabular}
+    \caption{Możliwe tłumaczenia odpowiednich fragmentów}
+    \label{tab:my_label}
+\end{table}
+
+\end{document}
