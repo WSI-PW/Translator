@@ -15,12 +15,12 @@ namespace Translator_Database.DatabaseFactory
         /// </summary>
         /// <param name="filepaths">Source of data</param>
         /// <returns></returns>
-        T CreateDatabase(string[] filepaths); 
+        T CreateDatabase(string[] filepaths);
         /// <summary>
         /// Function loads deserializes database from file
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        T LoadDatabase(string path)
+        T LoadDatabase(string path);
     }
 }
