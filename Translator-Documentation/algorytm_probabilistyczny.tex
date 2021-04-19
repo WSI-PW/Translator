@@ -1,0 +1,102 @@
+\subsection{Koncept}
+Celem zastosowania metody probabilistycznej jest uzyskanie efektu bardziej naturalnego tłumaczenia. Zamiast tłumaczyć słowo po słowie, algorytm stara się tłumaczyć całe zdania, a w razie niepowodzenia rozbija je na mniejsze zbitki słów, wciąż próbując tłumaczyć więcej niż jedno słowo na raz. Dzięki temu, że przygotowane dane, z których korzysta algorytm zostały przygotowane przez człowieka, ostateczne tłumaczenie będzie lepszej jakości.
+
+\subsection{Wariant zachłanny}
+Ten wariant algorytmu stara się odnaleźć tłumaczenie ciągu jak największej ilości słów. Potem tak samo z pozostałą częścią zdania, aż do skompletowania pełnego tłumaczenia w języku angielskim.
+
+Algorytm działa następująco. Na wejściu przyjmuje $n$ wyrazowy ciąg słów. Próbuje przetłumaczyć wszystkie $n$ słów naraz. Jeżeli mu się nie uda, próbuje przetłumaczyć jakikolwiek $n-1$ wyrazowy podciąg ciągu wejściowy. Jeżeli akcja się nie powiedzie, to próbuje tłumaczyć coraz krótsze ciągi słów. Gdy uda mu się jakiś przetłumaczyć, rekurencyjnie wywołuje tłumaczenie dla lewej i prawej części zdania, które nie zawierają się w przetłumaczonym podciągu. Poniższy pseudokod prezentuje działanie tego wariantu: 
+
+\begin{verbatim}
+string Tłumacz(string[] zdanie)
+{
+.   if(długość zdania = 0)
+.   {   
+.   .   return "";
+.   }
+.
+.   for(int n = długość zdania; n >= 1; n--)
+.   {
+.   .   for(int i = 0; i + n <= długość zdania; i++)
+.   .   {
+.   .   .   string[] podciąg = podciąg zdania długości n 
+.   .   .               zaczynający się od indeksu i;
+.   .   .               
+.   .   .   string tłumaczenie = Znajdź_w_bazie_tłumaczeń(podciąg);
+.   .   .   
+.   .   .   if(tłumaczenie znalezione)
+.   .   .   {
+.   .   .   .   string[] lewy_podciąg = podciąg zdania 
+.   .   .   .       od początku do indeksu max(0,i-1);
+.   .   .   .   string[] prawy_podciąg = podciąg zdania
+.   .   .   .       od indeksu i+n do końca;
+.   .   .   .   
+.   .   .   .   return Tłumacz(lewy_podciąg) +
+.   .   .   .           tłumaczenie +
+.   .   .   .           Tłumacz(prawy_podciąg);
+.   .   .   }
+.   .   }
+.   }
+.
+}
+\end{verbatim}
+
+Gdzie długość zdania to ilość słów, z których się składa. Zmienna $n$ ma wartość długości podciągu, który aktualnie próbujemy przetłumaczyć. Zmienna $i$ przechowuje indeks, od którego podciąg ma się zaczynać. Dzięki temu możemy iterować po wszystkich podciągach długości od $n$ do $1$.
+
+\subsection{Wariant dynamiczny}
+Ten wariant algorytmu stara się podzielić tłumaczone zdanie na jak najmniejszą liczbę ciągów słów, z czego każdy z tych ciągów jest już gotowy w całości do przetłumaczenia. Dzięki temu finalne tłumaczenie zdania będzie bardziej spójne.
+
+Algorytm podobnie przyjmuje $n$ wyrazowy ciąg słów. Na początku deklarowana jest tablica, która indeksowana jest parą $(n,i)$, gdzie $n$ to długość podciągu, a $i$ to indeks początku podciągu. Przechowuje ona tłumaczenie danego fragmentu oraz informację o tym, z ilu fragmentów z bazy danych się składa. Zainicjowana jest wartościami $( "", \infty)$. Najpierw przetłumaczony zostaje każdy jednoelementowy ciąg. Następnie dla każdego dłuższego podciągu sprawdza się, czy może on być atomowo przetłumaczony. Jeżeli nie, iteruje się po jego podziałach na dwie części i wybiera najbardziej optymalny podział, czyli taki, który da się osiągnąć dzieląc zdanie na minimalną liczbę podciągów. Poniżej pseudokod dla tego wariantu:
+
+\begin{verbatim}
+string Tłumacz(string[] zdanie)
+{
+.   (string tłumaczenie, int ile_tłumaczeń)[ , ] tłumaczenia;
+.    
+.    for(int i=0; i < długość zdania; i++)
+.    {
+.    .   tłumaczenia[1, i].tłumaczenie = 
+.    .          Znajdź_w_bazie_tłumaczeń(zdanie[i]);
+.    .   tłumaczenia[1, i].ile_tłumaczeń = 1;
+.    }
+.    
+.    for(int n = 2; n <= długość zdania; n++)
+.    {
+.    .   for(int i = 0; i + n <= długość zdania; i++)
+.    .   {
+.    .   .   string[] podciąg = podciąg zdania o długości n
+.    .   .                       od indeksu i;
+.    .   .   string tłumaczenie = Znajdź_w_bazie_tłumaczeń(podciąg);
+.    .   .   if( tłumaczenie znalezione )
+.    .   .   {
+.    .   .   .   tłumaczenia[n, i] = (1, tłumaczenie);
+.    .   .   }
+.    .   .   else
+.    .   .   {
+.    .   .   .   for(int j = i+1; j+1 < i+n; j++)
+.    .   .   .   {
+.    .   .   .   .   // indeksy i długości lewej 
+.    .   .   .   .   // i prawej części podciągu
+.    .   .   .   .   int l_i = i;
+.    .   .   .   .   int l_n = j - i; 
+.    .   .   .   .   int r_i = j;
+.    .   .   .   .   int r_n = n - l_n;
+.    .   .   .   .   
+.    .   .   .   .   int ile = tłumaczenia[l_i, l_n].ile_tłumaczeń +
+.    .   .   .   .             tłumaczenia[r_i, r_n].ile_tłumaczeń;
+.    .   .   .   .             
+.    .   .   .   .   if(ile < tłumaczenia[n, i].ile_tłumaczeń)
+.    .   .   .   .   {
+.    .   .   .   .   .   string tłumaczenie =  
+.    .   .   .   .   .   tłumaczenia[l_i, l_n].tłumaczenie +
+.    .   .   .   .   .          tłumaczenia[r_i, r_n].tłumaczenie;
+.    .   .   .   .   .   
+.    .   .   .   .   .   tłumaczenia[n, i] = (ile, tłumaczenie);
+.    .   .   .   .   }
+.    .   .   .   }
+.    .   .   }
+.    .   }
+.    }
+.    
+.    return tłumaczenia[długość zdania, 0].tłumaczenie;
+}
+\end{verbatim}
