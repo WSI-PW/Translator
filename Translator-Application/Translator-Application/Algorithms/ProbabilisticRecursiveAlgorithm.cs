@@ -7,7 +7,7 @@ using Translator_Database.Database;
 
 namespace Translator_Application.Algorithms
 {
-    class ProbabilisticAlgorithm<T> : IAlgorithm<T>
+    class ProbabilisticRecursiveAlgorithm<T> : IAlgorithm<T>
         where T : IDatabase
     {
         public string Solve(T database, string text)

@@ -19,7 +19,8 @@ namespace Translator_Application
         IDatabase probabilisticDatabase = null;
 
         IAlgorithm<IDatabase> bruteForceAlgorithm = new BruteForceAlgorithm<IDatabase>();
-        IAlgorithm<IDatabase> probabilisticAlgorithm = new ProbabilisticAlgorithm<IDatabase>();
+        IAlgorithm<IDatabase> probabilisticDynamicAlgorithm = new ProbabilisticDynamicAlgorithm<IDatabase>();
+        IAlgorithm<IDatabase> probabilisticRecursiveAlgorithm = new ProbabilisticRecursiveAlgorithm<IDatabase>();
 
         public Form1()
         {
@@ -80,7 +81,11 @@ namespace Translator_Application
             string input = inputTextBox.Text;
 
             bruteForceTextBox.Text = Translate(bruteForceAlgorithm, bruteForceDatabase, input);
-            probabilisticTextBox.Text = Translate(probabilisticAlgorithm, probabilisticDatabase, input);
+            if(recursiveButton.Checked)
+                probabilisticTextBox.Text = Translate(probabilisticRecursiveAlgorithm, probabilisticDatabase, input);
+            else if(dynamicButton.Checked)
+                probabilisticTextBox.Text = Translate(probabilisticDynamicAlgorithm, probabilisticDatabase, input);
         }
+
     }
 }
