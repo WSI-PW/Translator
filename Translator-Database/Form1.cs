@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Translator_Database.Database;
+using Translator_Database.DatabaseFactory;
 using Translator_Database.DatabaseFactory;
 
 namespace Translator_Database

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseFactory\BruteforceDatabaseFactory.cs" />
+    <Compile Include="DatabaseFactory\DatabaseFactory.cs" />
     <Compile Include="DatabaseFactory\FactoryRunner.cs" />
     <Compile Include="DatabaseFactory\IDatabaseFactory.cs" />
     <Compile Include="DatabaseFactory\ProbabilisticDatabaseFactory.cs" />

@@ -4,10 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Translator_Database.Database
+namespace Translator_Database.DatabaseFactory
 {
     public interface IDatabase
     {
+        /// <summary>
+        /// Creates an instance of database with data initialized
+        /// </summary>
+        /// <param name="data">data to be initialized</param>
+        /// <returns></returns>
+        void SetData(Dictionary<string, Dictionary<string, double>> data);
         /// <summary>
         /// Function translates input. If translation not possible, returns NULL.
         /// </summary>

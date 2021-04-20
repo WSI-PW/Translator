@@ -3,19 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Translator_Database.Database;
+using Translator_Database.DatabaseFactory;
 
 namespace Translator_Database.DatabaseFactory
 {
-    public class ProbabilisticDatabaseFactory<T> : IDatabaseFactory<T>
-        where T : class, IDatabase
+    public class ProbabilisticDatabaseFactory<T> : DatabaseFactory<T>
+        where T : class, IDatabase, new()
     {
-        public T CreateDatabase(string[] filepaths)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T LoadDatabase(string path)
+        public override T CreateDatabase(string[] filepaths)
         {
             throw new NotImplementedException();
         }
