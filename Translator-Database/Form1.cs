@@ -15,7 +15,6 @@ namespace Translator_Database
     public partial class Form1 : Form
     {
         List<string> filePaths = new List<string>();
-        Type typeOfFactory = null;
         public Form1()
         {
             InitializeComponent();
@@ -48,6 +47,12 @@ namespace Translator_Database
                     FactoryRunner<ProbabilisticDatabaseFactory<TranslatorDatabase>, TranslatorDatabase>.Run(filePaths, savePath);
                 }
             }
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            filePaths.Clear();
+            DataGrid.Rows.Clear();
         }
     }
 }
