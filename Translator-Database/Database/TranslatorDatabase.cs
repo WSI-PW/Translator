@@ -8,9 +8,14 @@ namespace Translator_Database.Database
 {
     public class TranslatorDatabase : IDatabase
     {
+        Dictionary<string, Dictionary<string, double>> database = new Dictionary<string, Dictionary<string, double>>();
         public void Insert(string text, string translation, double weight)
         {
-            throw new NotImplementedException();
+            var translations = database[text];
+            if(translations.ContainsKey(translation))
+            {
+                translations.Add(translation, weight);
+            }
         }
 
         public void Save(string path)
