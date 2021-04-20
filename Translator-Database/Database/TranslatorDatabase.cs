@@ -46,16 +46,17 @@ namespace Translator_Database.DatabaseFactory
 
         public void Save(string path)
         {
+            path = Path.Combine(path, "database");
             string filepath;
             if (File.Exists(path))
             {
                 int i = 0;
                 while (File.Exists(path + i)) i++;
-                filepath = Path.Combine(path, "database" + i);
+                filepath = path + i;
             }
             else
             {
-                filepath = Path.Combine(path, "database");
+                filepath = path;
             }
 
             List<(string, string, double)> records = new List<(string, string, double)>();
