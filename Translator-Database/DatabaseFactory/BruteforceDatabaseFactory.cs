@@ -1,23 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Translator_Database.Database;
+using Translator_Database.DatabaseFactory;
 
 namespace Translator_Database.DatabaseFactory
 {
-    public class BruteforceDatabaseFactory<T> : IDatabaseFactory<T>
-        where T : class, IDatabase
+    public class BruteforceDatabaseFactory<T> : DatabaseFactory<T>
+        where T : class, IDatabase, new()
     {
-        public T CreateDatabase(string[] filepaths)
+        public override T CreateDatabase(string[] filepaths)
         {
-            throw new NotImplementedException();
-        }
+            T database = new T();
+            foreach (string path in filepaths)
+            {
+                TextReader reader = new StreamReader(path);
+                string content = reader.ReadToEnd();
+                string[] words = content.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                foreach(string word in words)
+                {
+                    string[] pair = word.Split(';');
+                    database.Insert(pair[0], pair[1], 0.1);
+                }
+            }
 
-        public T LoadDatabase(string path)
-        {
-            throw new NotImplementedException();
+            return database;
         }
     }
 }
