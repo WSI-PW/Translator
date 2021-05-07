@@ -24,23 +24,23 @@ namespace Translator_Database.DatabaseFactory
         public void Insert(string text, string translation, double weight)
         {
             Dictionary<string, double> translations;
-            if (database.ContainsKey(text))
+            if (database.ContainsKey(text.ToLower()))
             {
-                translations = database[text];
+                translations = database[text.ToLower()];
             }
             else
             {
                 translations = new Dictionary<string, double>();
-                database.Add(text, translations);
+                database.Add(text.ToLower(), translations);
             }
 
-            if(translations.ContainsKey(translation))
+            if(translations.ContainsKey(translation.ToLower()))
             {
-                translations[translation] += weight;
+                translations[translation.ToLower()] += weight;
             }
             else
             {
-                translations.Add(translation, weight);
+                translations.Add(translation.ToLower(), weight);
             }
         }
 
@@ -76,9 +76,9 @@ namespace Translator_Database.DatabaseFactory
 
         public string Translate(string text)
         {
-            if (!database.ContainsKey(text)) return null;
+            if (!database.ContainsKey(text.ToLower())) return null;
 
-            var translations = database[text];
+            var translations = database[text.ToLower()];
 
             // Select translation with highest weight.
             var translation = translations.OrderByDescending(kv => kv.Value).FirstOrDefault();
