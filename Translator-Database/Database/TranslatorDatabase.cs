@@ -79,7 +79,9 @@ namespace Translator_Database.DatabaseFactory
             if (!database.ContainsKey(text)) return null;
 
             var translations = database[text];
-            var translation = translations.Max();
+
+            // Select translation with highest weight.
+            var translation = translations.OrderByDescending(kv => kv.Value).FirstOrDefault();
             return translation.Key;
         }
     }

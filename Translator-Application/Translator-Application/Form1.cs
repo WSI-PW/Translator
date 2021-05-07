@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,10 @@ namespace Translator_Application
 {
     public partial class Form1 : Form
     {
+        private readonly Color OK_COLOR = Color.DarkGreen;
+        private readonly Color WARNING_COLOR = Color.DarkRed;
+        private const string NO_DATABASE_TEXT = "No data source selected";
+
         IDatabase bruteForceDatabase = null;
         IDatabase probabilisticDatabase = null;
 
@@ -25,6 +30,7 @@ namespace Translator_Application
         public Form1()
         {
             InitializeComponent();
+            UpdateDatabaseStatusLabel(NO_DATABASE_TEXT, WARNING_COLOR);
         }
 
         private P LoadDatabase<T, P>(string path)
@@ -45,6 +51,8 @@ namespace Translator_Application
                 try
                 {
                     bruteForceDatabase = LoadDatabase<BruteforceDatabaseFactory<TranslatorDatabase>, TranslatorDatabase>(openFileDialog.FileName);
+                    string labelText = Path.GetFileName(openFileDialog.FileName);
+                    UpdateDatabaseStatusLabel(labelText, OK_COLOR);
                 }
                 catch
                 {
@@ -61,6 +69,7 @@ namespace Translator_Application
                 try
                 {
                     probabilisticDatabase = LoadDatabase<ProbabilisticDatabaseFactory<TranslatorDatabase>, TranslatorDatabase>(openFileDialog.FileName);
+                    UpdateDatabaseStatusLabel(openFileDialog.FileName, OK_COLOR);
                 }
                 catch
                 {
@@ -87,5 +96,10 @@ namespace Translator_Application
                 probabilisticTextBox.Text = Translate(probabilisticDynamicAlgorithm, probabilisticDatabase, input);
         }
 
+        private void UpdateDatabaseStatusLabel(string text, Color color)
+        {
+            DatabaseStatusLabel.Text = text;
+            DatabaseStatusLabel.ForeColor = color;
+        }
     }
 }

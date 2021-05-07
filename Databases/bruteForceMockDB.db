@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfValueTupleOfStringStringDouble xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ValueTupleOfStringStringDouble>
+    <Item1>Ala</Item1>
+    <Item2>Ala</Item2>
+    <Item3>10</Item3>
+  </ValueTupleOfStringStringDouble>
+  <ValueTupleOfStringStringDouble>
+    <Item1>Ala</Item1>
+    <Item2>Mlotek</Item2>
+    <Item3>5</Item3>
+  </ValueTupleOfStringStringDouble>
+  <ValueTupleOfStringStringDouble>
+    <Item1>ma</Item1>
+    <Item2>has</Item2>
+    <Item3>10</Item3>
+  </ValueTupleOfStringStringDouble>
+  <ValueTupleOfStringStringDouble>
+    <Item1>kota</Item1>
+    <Item2>cat</Item2>
+    <Item3>10</Item3>
+  </ValueTupleOfStringStringDouble>
+  <ValueTupleOfStringStringDouble>
+    <Item1>kota</Item1>
+    <Item2>Katze</Item2>
+    <Item3>5</Item3>
+  </ValueTupleOfStringStringDouble>
+</ArrayOfValueTupleOfStringStringDouble>
