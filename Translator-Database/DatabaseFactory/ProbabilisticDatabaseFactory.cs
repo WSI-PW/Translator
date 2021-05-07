@@ -35,8 +35,8 @@ namespace Translator_Database.DatabaseFactory
         private List<(string, string, double)> ProbabilisticSplit(string v)
         {
             string[] pair = v.Split(';');
-            string[] text = pair[0].Split(' ');
-            string[] tran = pair[1].Split(' ');
+            string[] tran = pair[0].Split(new string[] {" "}, StringSplitOptions.RemoveEmptyEntries);
+            string[] text = pair[1].Split(new string[] {" "}, StringSplitOptions.RemoveEmptyEntries);
 
             int n = text.Length;
             int m = tran.Length;
@@ -50,10 +50,12 @@ namespace Translator_Database.DatabaseFactory
 
                     string[] translated_words = new string[j - i + 1];
                     Array.Copy(text, i, translated_words, 0, j - i + 1);
-                    string translated_text = String.Join(" ", translated_words);
+                    string translated_text = string.Join(" ", translated_words);
 
                     int x = Math.Min(i, m - n + i);
+                    x = Math.Max(x, 0);
                     int y = Math.Max(j, m - n + j);
+                    y = Math.Min(y, m - 1);
 
                     int xy = y - x + 1;
 

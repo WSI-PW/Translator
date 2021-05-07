@@ -23,7 +23,7 @@ namespace Translator_Application.Algorithms
             if (translatedWord == null)
             {
                 // No translation found in database. Not much we can do here.
-                return originalWord;
+                return "###";
 
                 // Other option: return empty string or "?".
             }

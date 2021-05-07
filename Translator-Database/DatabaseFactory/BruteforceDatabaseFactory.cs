@@ -22,7 +22,7 @@ namespace Translator_Database.DatabaseFactory
                 foreach(string word in words)
                 {
                     string[] pair = word.Split(';');
-                    database.Insert(pair[0], pair[1], 0.1);
+                    database.Insert(pair[1], pair[0], 0.1);
                 }
             }
 
