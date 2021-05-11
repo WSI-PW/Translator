@@ -46,7 +46,7 @@ namespace Translator_Application.Algorithms
 
                     if (trans is null)
                     {
-                        for (int j = i + 1; j + 1 < i + n; j++)
+                        for (int j = i + 1; j + 1 <= i + n; j++)
                         {
                             int l_i = i;
                             int l_n = j - i;
@@ -58,7 +58,7 @@ namespace Translator_Application.Algorithms
 
                             if (num < translations[n, i].numTranslations)
                             {
-                                trans = translations[l_n, l_i].translation
+                                trans = translations[l_n, l_i].translation + " "
                                 + translations[r_n, r_i].translation;
 
                                 translations[n, i] = (trans, num);
@@ -72,6 +72,8 @@ namespace Translator_Application.Algorithms
 
                 }
             }
+            if (translations[words.Length, 0].translation is null)
+                return "###";
 
             return translations[words.Length, 0].translation;
 
