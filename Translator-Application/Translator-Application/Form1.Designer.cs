@@ -34,15 +34,16 @@ namespace Translator_Application
             this.probabilisticTextBox = new System.Windows.Forms.TextBox();
             this.bruteForceTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.translateButton = new System.Windows.Forms.Button();
-            this.probabilisticButton = new System.Windows.Forms.Button();
-            this.bruteForceButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dynamicButton = new System.Windows.Forms.RadioButton();
             this.recursiveButton = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.DatabaseGroupBox = new System.Windows.Forms.GroupBox();
             this.DatabaseStatusLabel = new System.Windows.Forms.Label();
+            this.bruteForceButton = new System.Windows.Forms.Button();
+            this.probabilisticButton = new System.Windows.Forms.Button();
+            this.translateButton = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -102,6 +103,7 @@ namespace Translator_Application
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.29167F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.70834F));
+            this.tableLayoutPanel2.Controls.Add(this.button1, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.groupBox1, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.DatabaseGroupBox, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.translateButton, 0, 0);
@@ -114,45 +116,15 @@ namespace Translator_Application
             this.tableLayoutPanel2.Size = new System.Drawing.Size(384, 219);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
-            // translateButton
-            // 
-            this.translateButton.Location = new System.Drawing.Point(3, 3);
-            this.translateButton.Name = "translateButton";
-            this.translateButton.Size = new System.Drawing.Size(75, 23);
-            this.translateButton.TabIndex = 2;
-            this.translateButton.Text = "Translate!";
-            this.translateButton.UseVisualStyleBackColor = true;
-            this.translateButton.Click += new System.EventHandler(this.translateButton_Click);
-            // 
-            // probabilisticButton
-            // 
-            this.probabilisticButton.Location = new System.Drawing.Point(6, 48);
-            this.probabilisticButton.Name = "probabilisticButton";
-            this.probabilisticButton.Size = new System.Drawing.Size(134, 23);
-            this.probabilisticButton.TabIndex = 1;
-            this.probabilisticButton.Text = "Load probabilistic database";
-            this.probabilisticButton.UseVisualStyleBackColor = true;
-            this.probabilisticButton.Click += new System.EventHandler(this.probabilisticButton_Click);
-            // 
-            // bruteForceButton
-            // 
-            this.bruteForceButton.Location = new System.Drawing.Point(6, 19);
-            this.bruteForceButton.Name = "bruteForceButton";
-            this.bruteForceButton.Size = new System.Drawing.Size(134, 23);
-            this.bruteForceButton.TabIndex = 0;
-            this.bruteForceButton.Text = "Load Brute/force database";
-            this.bruteForceButton.UseVisualStyleBackColor = true;
-            this.bruteForceButton.Click += new System.EventHandler(this.bruteForceButton_Click);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.dynamicButton);
             this.groupBox1.Controls.Add(this.recursiveButton);
-            this.groupBox1.Location = new System.Drawing.Point(126, 126);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Location = new System.Drawing.Point(126, 127);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox1.Size = new System.Drawing.Size(255, 91);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(255, 90);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Version of probabilistic algorithm";
@@ -161,7 +133,7 @@ namespace Translator_Application
             // 
             this.dynamicButton.AutoSize = true;
             this.dynamicButton.Location = new System.Drawing.Point(14, 58);
-            this.dynamicButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dynamicButton.Margin = new System.Windows.Forms.Padding(2);
             this.dynamicButton.Name = "dynamicButton";
             this.dynamicButton.Size = new System.Drawing.Size(66, 17);
             this.dynamicButton.TabIndex = 1;
@@ -173,22 +145,13 @@ namespace Translator_Application
             // 
             this.recursiveButton.AutoSize = true;
             this.recursiveButton.Location = new System.Drawing.Point(14, 36);
-            this.recursiveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.recursiveButton.Margin = new System.Windows.Forms.Padding(2);
             this.recursiveButton.Name = "recursiveButton";
             this.recursiveButton.Size = new System.Drawing.Size(73, 17);
             this.recursiveButton.TabIndex = 0;
             this.recursiveButton.TabStop = true;
             this.recursiveButton.Text = "Recursive";
             this.recursiveButton.UseVisualStyleBackColor = true;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Location = new System.Drawing.Point(496, 449);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(8, 8);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
             // 
             // DatabaseGroupBox
             // 
@@ -213,6 +176,55 @@ namespace Translator_Application
             this.DatabaseStatusLabel.TabIndex = 2;
             this.DatabaseStatusLabel.Text = "No database";
             this.DatabaseStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // bruteForceButton
+            // 
+            this.bruteForceButton.Location = new System.Drawing.Point(6, 19);
+            this.bruteForceButton.Name = "bruteForceButton";
+            this.bruteForceButton.Size = new System.Drawing.Size(134, 23);
+            this.bruteForceButton.TabIndex = 0;
+            this.bruteForceButton.Text = "Load Brute/force database";
+            this.bruteForceButton.UseVisualStyleBackColor = true;
+            this.bruteForceButton.Click += new System.EventHandler(this.bruteForceButton_Click);
+            // 
+            // probabilisticButton
+            // 
+            this.probabilisticButton.Location = new System.Drawing.Point(6, 48);
+            this.probabilisticButton.Name = "probabilisticButton";
+            this.probabilisticButton.Size = new System.Drawing.Size(134, 23);
+            this.probabilisticButton.TabIndex = 1;
+            this.probabilisticButton.Text = "Load probabilistic database";
+            this.probabilisticButton.UseVisualStyleBackColor = true;
+            this.probabilisticButton.Click += new System.EventHandler(this.probabilisticButton_Click);
+            // 
+            // translateButton
+            // 
+            this.translateButton.Location = new System.Drawing.Point(3, 3);
+            this.translateButton.Name = "translateButton";
+            this.translateButton.Size = new System.Drawing.Size(107, 23);
+            this.translateButton.TabIndex = 2;
+            this.translateButton.Text = "Translate!";
+            this.translateButton.UseVisualStyleBackColor = true;
+            this.translateButton.Click += new System.EventHandler(this.translateButton_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(496, 449);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(8, 8);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "groupBox2";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(3, 128);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(107, 36);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "Translate sentences in file";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.buttonTranslateFile_Click);
             // 
             // Form1
             // 
@@ -250,6 +262,7 @@ namespace Translator_Application
         private System.Windows.Forms.GroupBox DatabaseGroupBox;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label DatabaseStatusLabel;
+        private System.Windows.Forms.Button button1;
     }
 }
 

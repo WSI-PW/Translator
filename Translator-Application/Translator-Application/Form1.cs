@@ -101,5 +101,44 @@ namespace Translator_Application
             DatabaseStatusLabel.Text = text;
             DatabaseStatusLabel.ForeColor = color;
         }
+
+        private void buttonTranslateFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    var lines = File.ReadAllLines(openFileDialog.FileName);
+                    for(int i = 0;i<lines.Length;i++)
+                    {
+                        string line = lines[i];
+                        string translatedLine;
+                        translatedLine = Translate(bruteForceAlgorithm, bruteForceDatabase, line);
+                        if (recursiveButton.Checked)
+                            translatedLine = Translate(probabilisticRecursiveAlgorithm, probabilisticDatabase, line);
+                        else if (dynamicButton.Checked)
+                            translatedLine = Translate(probabilisticDynamicAlgorithm, probabilisticDatabase, line);
+
+                        lines[i] += (" => " + translatedLine);
+                    }
+
+                    string allTranslatedText = string.Join("\n", lines);
+                    bruteForceTextBox.Text = allTranslatedText;
+                    if (recursiveButton.Checked)
+                        bruteForceTextBox.Text = allTranslatedText;
+                    else if (dynamicButton.Checked)
+                        probabilisticTextBox.Text = allTranslatedText;
+
+                    var targetFileName = Path.ChangeExtension(openFileDialog.FileName, ".translated");
+                    File.WriteAllLines(targetFileName, lines);
+                    MessageBox.Show("Success! Save translations in " + targetFileName);
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to read file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }
