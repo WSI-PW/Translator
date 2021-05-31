@@ -109,30 +109,39 @@ namespace Translator_Application
             {
                 try
                 {
-                    var lines = File.ReadAllLines(openFileDialog.FileName);
-                    for(int i = 0;i<lines.Length;i++)
-                    {
-                        string line = lines[i];
-                        string translatedLine;
-                        translatedLine = Translate(bruteForceAlgorithm, bruteForceDatabase, line);
-                        if (recursiveButton.Checked)
-                            translatedLine = Translate(probabilisticRecursiveAlgorithm, probabilisticDatabase, line);
-                        else if (dynamicButton.Checked)
-                            translatedLine = Translate(probabilisticDynamicAlgorithm, probabilisticDatabase, line);
+                    var linesBF = File.ReadAllLines(openFileDialog.FileName);
+                    var linesPD = (string[])linesBF.Clone();
+                    var linesPR = (string[])linesBF.Clone();
 
-                        lines[i] += (" => " + translatedLine);
+                    for (int i = 0;i<linesBF.Length;i++)
+                    {
+                        string line = linesBF[i];
+                        string translatedLineBF, translatedLinePD, translatedLinePR;
+                        translatedLineBF = Translate(bruteForceAlgorithm, bruteForceDatabase, line);
+                        translatedLinePR = Translate(probabilisticRecursiveAlgorithm, probabilisticDatabase, line);
+                        translatedLinePD = Translate(probabilisticDynamicAlgorithm, probabilisticDatabase, line);
+
+                        linesBF[i] += (" => " + translatedLineBF);
+                        linesPD[i] += (" => " + translatedLinePD);
+                        linesPR[i] += (" => " + translatedLinePR);
                     }
 
-                    string allTranslatedText = string.Join("\n", lines);
-                    bruteForceTextBox.Text = allTranslatedText;
+                    string allTranslatedTextBF = string.Join("\n", linesBF);
+                    string allTranslatedTextPR = string.Join("\n", linesPR);
+                    string allTranslatedTextPD = string.Join("\n", linesPD);
+                    bruteForceTextBox.Text = allTranslatedTextBF;
                     if (recursiveButton.Checked)
-                        bruteForceTextBox.Text = allTranslatedText;
+                        bruteForceTextBox.Text = allTranslatedTextPR;
                     else if (dynamicButton.Checked)
-                        probabilisticTextBox.Text = allTranslatedText;
+                        probabilisticTextBox.Text = allTranslatedTextPD;
 
-                    var targetFileName = Path.ChangeExtension(openFileDialog.FileName, ".translated");
-                    File.WriteAllLines(targetFileName, lines);
-                    MessageBox.Show("Success! Save translations in " + targetFileName);
+                    var targetFileNameBF = Path.ChangeExtension(openFileDialog.FileName, ".BF.translated");
+                    var targetFileNamePR = Path.ChangeExtension(openFileDialog.FileName, ".PR.translated");
+                    var targetFileNamePD = Path.ChangeExtension(openFileDialog.FileName, ".PD.translated");
+                    File.WriteAllLines(targetFileNameBF, linesBF);
+                    File.WriteAllLines(targetFileNamePD, linesPD);
+                    File.WriteAllLines(targetFileNamePR, linesPR);
+                    MessageBox.Show("Success! Save translations in " + openFileDialog.FileName);
                 }
                 catch
                 {
